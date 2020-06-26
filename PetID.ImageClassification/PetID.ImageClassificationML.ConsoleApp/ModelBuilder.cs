@@ -13,8 +13,8 @@ namespace PetID_ImageClassificationML.ConsoleApp
 {
     public static class ModelBuilder
     {
-        private static string TRAIN_DATA_FILEPATH = @"C:\Users\TNT\AppData\Local\Temp\a97301ab-d54d-4eea-b48d-76ad4b2058b7.tsv";
-        private static string MODEL_FILEPATH = @"C:\Users\TNT\AppData\Local\Temp\MLVSTools\PetID.ImageClassificationML\PetID.ImageClassificationML.Model\MLModel.zip";
+        private static string TRAIN_DATA_FILEPATH = @"Data/data.tsv";
+        private static string MODEL_FILEPATH = @"MLModel.zip";
         // Create MLContext to be shared across the model creation workflow objects 
         // Set a random seed for repeatable/deterministic results across multiple trainings.
         private static MLContext mlContext = new MLContext(seed: 1);

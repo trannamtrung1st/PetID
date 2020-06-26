@@ -11,7 +11,7 @@ namespace PetID_ImageClassificationML.ConsoleApp
     class Program
     {
         //Dataset to use for predictions 
-        private const string DATA_FILEPATH = @"C:\Users\TNT\AppData\Local\Temp\a97301ab-d54d-4eea-b48d-76ad4b2058b7.tsv";
+        private const string DATA_FILEPATH = @"Data/data.tsv";
 
         static void Main(string[] args)
         {
