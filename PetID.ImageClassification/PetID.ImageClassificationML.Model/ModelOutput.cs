@@ -2,6 +2,7 @@
 
 using System;
 using Microsoft.ML.Data;
+using Newtonsoft.Json;
 
 namespace PetID.ImageClassificationML.Model
 {
@@ -9,8 +10,10 @@ namespace PetID.ImageClassificationML.Model
     {
         // ColumnName attribute is used to change the column name from
         // its default value, which is the name of the field.
+        [JsonProperty("prediction")]
         [ColumnName("PredictedLabel")]
         public String Prediction { get; set; }
+        [JsonProperty("score")]
         public float[] Score { get; set; }
     }
 }

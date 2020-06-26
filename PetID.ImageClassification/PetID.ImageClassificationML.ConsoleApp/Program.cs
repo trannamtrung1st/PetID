@@ -17,16 +17,16 @@ namespace PetID_ImageClassificationML.ConsoleApp
         static void Main(string[] args)
         {
             //Create MLModel
-            ModelBuilder.CreateModel();
+            //ModelBuilder.CreateModel();
 
             //Consume
-            //var model = new ConsumeModel("MLModel.zip");
-            //var output = model.Predict(new ModelInput
-            //{
-            //    ImageRaw = File.ReadAllBytes(
-            //        @"T:\FPT\STUDY\SUMMER2020\PRX\Project\PetID\PetID.ImageClassification\PetID.ImageClassificationML.ConsoleApp\Data\test\2.jpg")
-            //});
-            //Console.WriteLine(JsonConvert.SerializeObject(output));
+            var model = new ConsumeModel("MLModel.zip");
+            var output = model.Predict(new ModelInput
+            {
+                ImageRaw = File.ReadAllBytes(
+                    @"T:\FPT\STUDY\SUMMER2020\PRX\Project\PetID\PetID.ImageClassification\PetID.ImageClassificationML.ConsoleApp\Data\test\2.jpg")
+            });
+            Console.WriteLine(JsonConvert.SerializeObject(output));
         }
     }
 }

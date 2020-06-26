@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetID.ImageClassificationML
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetID.ImageClassificationML.ConsoleApp", "PetID.ImageClassificationML.ConsoleApp\PetID.ImageClassificationML.ConsoleApp.csproj", "{F8867140-750B-4299-9EB0-10540051EA8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetID.ClassifyWebApi", "PetID.ClassifyWebApi\PetID.ClassifyWebApi.csproj", "{683D6F40-2FC1-4727-BB24-61D1970A36D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F8867140-750B-4299-9EB0-10540051EA8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8867140-750B-4299-9EB0-10540051EA8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8867140-750B-4299-9EB0-10540051EA8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{683D6F40-2FC1-4727-BB24-61D1970A36D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{683D6F40-2FC1-4727-BB24-61D1970A36D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{683D6F40-2FC1-4727-BB24-61D1970A36D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{683D6F40-2FC1-4727-BB24-61D1970A36D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
