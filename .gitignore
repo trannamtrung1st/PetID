@@ -368,3 +368,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /PetID.ImageClassification/PetID.ImageClassification/Data
+/PetID.ImageClassification/PetID.ImageClassificationML.ConsoleApp/Data
+/PetID.ImageClassification/PetID.ImageClassificationML.Model/MLModel.zip

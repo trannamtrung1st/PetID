@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29920.165
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetID.ImageClassification", "PetID.ImageClassification\PetID.ImageClassification.csproj", "{F4F143AA-9F6E-4A92-9C6E-CCF292342AE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetID.ImageClassification", "PetID.ImageClassification\PetID.ImageClassification.csproj", "{F4F143AA-9F6E-4A92-9C6E-CCF292342AE0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetID.ImageClassificationML.Model", "PetID.ImageClassificationML.Model\PetID.ImageClassificationML.Model.csproj", "{DDA027CD-DF4A-49C2-9664-01DDC05CFC49}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetID.ImageClassificationML.ConsoleApp", "PetID.ImageClassificationML.ConsoleApp\PetID.ImageClassificationML.ConsoleApp.csproj", "{F8867140-750B-4299-9EB0-10540051EA8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{F4F143AA-9F6E-4A92-9C6E-CCF292342AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4F143AA-9F6E-4A92-9C6E-CCF292342AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4F143AA-9F6E-4A92-9C6E-CCF292342AE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDA027CD-DF4A-49C2-9664-01DDC05CFC49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDA027CD-DF4A-49C2-9664-01DDC05CFC49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDA027CD-DF4A-49C2-9664-01DDC05CFC49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDA027CD-DF4A-49C2-9664-01DDC05CFC49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8867140-750B-4299-9EB0-10540051EA8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8867140-750B-4299-9EB0-10540051EA8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8867140-750B-4299-9EB0-10540051EA8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8867140-750B-4299-9EB0-10540051EA8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <ProjectReference Include="..\PetID.ImageClassificationML.Model\PetID.ImageClassificationML.Model.csproj" />
   </ItemGroup>
 
 </Project>
