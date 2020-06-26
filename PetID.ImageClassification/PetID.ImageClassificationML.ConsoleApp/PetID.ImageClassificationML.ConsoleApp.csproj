@@ -13,4 +13,9 @@
   <ItemGroup>
     <ProjectReference Include="..\PetID.ImageClassificationML.Model\PetID.ImageClassificationML.Model.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Data\data.tsv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

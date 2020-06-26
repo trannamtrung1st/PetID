@@ -3,7 +3,7 @@
 using System;
 using Microsoft.ML.Data;
 
-namespace PetID_ImageClassificationML.Model
+namespace PetID.ImageClassificationML.Model
 {
     public class ModelOutput
     {

@@ -2,17 +2,10 @@
 
 using Microsoft.ML.Data;
 
-namespace PetID_ImageClassificationML.Model
+namespace PetID.ImageClassificationML.Model
 {
-    public class ModelInput
+    public class ModelInput : TraningModel
     {
-        [ColumnName("Label"), LoadColumn(0)]
-        public string Label { get; set; }
-
-
-        [ColumnName("ImageSource"), LoadColumn(1)]
-        public string ImageSource { get; set; }
-
-
+        public byte[] ImageRaw { get; set; }
     }
 }

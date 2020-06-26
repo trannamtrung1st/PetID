@@ -6,8 +6,8 @@ using System.IO;
 using System.Linq;
 using Microsoft.ML;
 using Microsoft.ML.Data;
-using PetID_ImageClassificationML.Model;
 using Microsoft.ML.Vision;
+using PetID.ImageClassificationML.Model;
 
 namespace PetID_ImageClassificationML.ConsoleApp
 {
@@ -22,18 +22,27 @@ namespace PetID_ImageClassificationML.ConsoleApp
         public static void CreateModel()
         {
             // Load Data
-            IDataView trainingDataView = mlContext.Data.LoadFromTextFile<ModelInput>(
+            IDataView trainingDataView = mlContext.Data.LoadFromTextFile<TraningModel>(
                                             path: TRAIN_DATA_FILEPATH,
                                             hasHeader: true,
                                             separatorChar: '\t',
                                             allowQuoting: true,
                                             allowSparse: false);
+            trainingDataView = mlContext.Data.ShuffleRows(trainingDataView);
+            //change input type from file to raw bytes
+            var preprocessingPipeline = mlContext.Transforms.LoadRawImageBytes(
+                    outputColumnName: "ImageRaw",
+                    imageFolder: null,
+                    inputColumnName: "ImageSource");
+            trainingDataView = preprocessingPipeline
+                    .Fit(trainingDataView)
+                    .Transform(trainingDataView);
 
             // Build training pipeline
             IEstimator<ITransformer> trainingPipeline = BuildTrainingPipeline(mlContext);
 
             // Evaluate quality of Model
-            Evaluate(mlContext, trainingDataView, trainingPipeline);
+            //Evaluate(mlContext, trainingDataView, trainingPipeline);
 
             // Train Model
             ITransformer mlModel = TrainModel(mlContext, trainingDataView, trainingPipeline);
@@ -46,11 +55,13 @@ namespace PetID_ImageClassificationML.ConsoleApp
         {
             // Data process configuration with pipeline data transformations 
             var dataProcessPipeline = mlContext.Transforms.Conversion.MapValueToKey("Label", "Label")
-                                      .Append(mlContext.Transforms.LoadRawImageBytes("ImageSource_featurized", null, "ImageSource"))
-                                      .Append(mlContext.Transforms.CopyColumns("Features", "ImageSource_featurized"));
+                                      .Append(mlContext.Transforms.CopyColumns("Features", "ImageRaw"));
             // Set the training algorithm 
-            var trainer = mlContext.MulticlassClassification.Trainers.ImageClassification(new ImageClassificationTrainer.Options() { LabelColumnName = "Label", FeatureColumnName = "Features" })
-                                      .Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel", "PredictedLabel"));
+            var trainer = mlContext.MulticlassClassification.Trainers.ImageClassification(new ImageClassificationTrainer.Options()
+            {
+                LabelColumnName = "Label",
+                FeatureColumnName = "Features"
+            }).Append(mlContext.Transforms.Conversion.MapKeyToValue("PredictedLabel"));
 
             var trainingPipeline = dataProcessPipeline.Append(trainer);
 
@@ -60,7 +71,7 @@ namespace PetID_ImageClassificationML.ConsoleApp
         public static ITransformer TrainModel(MLContext mlContext, IDataView trainingDataView, IEstimator<ITransformer> trainingPipeline)
         {
             Console.WriteLine("=============== Training  model ===============");
-
+            // Data process configuration with pipeline data transformations 
             ITransformer model = trainingPipeline.Fit(trainingDataView);
 
             Console.WriteLine("=============== End of training process ===============");

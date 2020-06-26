@@ -5,27 +5,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.ML;
-using PetID_ImageClassificationML.Model;
 
-namespace PetID_ImageClassificationML.Model
+namespace PetID.ImageClassificationML.Model
 {
     public class ConsumeModel
     {
-        // For more info on consuming ML.NET models, visit https://aka.ms/model-builder-consume
-        // Method for consuming model in your app
-        public static ModelOutput Predict(ModelInput input)
+        private readonly PredictionEngine<ModelInput, ModelOutput> _predictionEngine;
+        public ConsumeModel(string modelPath)
         {
-
             // Create new MLContext
             MLContext mlContext = new MLContext();
-
             // Load model & create prediction engine
-            string modelPath = @"C:\Users\TNT\AppData\Local\Temp\MLVSTools\PetID.ImageClassificationML\PetID.ImageClassificationML.Model\MLModel.zip";
             ITransformer mlModel = mlContext.Model.Load(modelPath, out var modelInputSchema);
-            var predEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
+            _predictionEngine = mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
+        }
 
+        // For more info on consuming ML.NET models, visit https://aka.ms/model-builder-consume
+        // Method for consuming model in your app
+        public ModelOutput Predict(ModelInput input)
+        {
             // Use model to make prediction on input data
-            ModelOutput result = predEngine.Predict(input);
+            ModelOutput result = _predictionEngine.Predict(input);
             return result;
         }
     }
