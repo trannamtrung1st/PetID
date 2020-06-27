@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlType;
  *                       &lt;complexContent>
  *                         &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                           &lt;sequence>
- *                             &lt;element name="breed" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *                             &lt;element name="petType" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                             &lt;element name="url" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *                           &lt;/sequence>
  *                         &lt;/restriction>
@@ -175,7 +175,7 @@ public class ParserConfig {
      *             &lt;complexContent>
      *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *                 &lt;sequence>
-     *                   &lt;element name="breed" type="{http://www.w3.org/2001/XMLSchema}string"/>
+     *                   &lt;element name="petType" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *                   &lt;element name="url" type="{http://www.w3.org/2001/XMLSchema}string"/>
      *                 &lt;/sequence>
      *               &lt;/restriction>
@@ -239,7 +239,7 @@ public class ParserConfig {
          *   &lt;complexContent>
          *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
          *       &lt;sequence>
-         *         &lt;element name="breed" type="{http://www.w3.org/2001/XMLSchema}string"/>
+         *         &lt;element name="petType" type="{http://www.w3.org/2001/XMLSchema}string"/>
          *         &lt;element name="url" type="{http://www.w3.org/2001/XMLSchema}string"/>
          *       &lt;/sequence>
          *     &lt;/restriction>
@@ -251,38 +251,38 @@ public class ParserConfig {
          */
         @XmlAccessorType(XmlAccessType.FIELD)
         @XmlType(name = "", propOrder = {
-            "breed",
+            "petType",
             "url"
         })
         public static class Page {
 
             @XmlElement(required = true)
-            protected String breed;
+            protected String petType;
             @XmlElement(required = true)
             protected String url;
 
             /**
-             * Gets the value of the breed property.
+             * Gets the value of the petType property.
              * 
              * @return
              *     possible object is
              *     {@link String }
              *     
              */
-            public String getBreed() {
-                return breed;
+            public String getPetType() {
+                return petType;
             }
 
             /**
-             * Sets the value of the breed property.
+             * Sets the value of the petType property.
              * 
              * @param value
              *     allowed object is
              *     {@link String }
              *     
              */
-            public void setBreed(String value) {
-                this.breed = value;
+            public void setPetType(String value) {
+                this.petType = value;
             }
 
             /**

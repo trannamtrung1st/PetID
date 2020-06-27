@@ -60,7 +60,7 @@ public class Parser {
             //parse DOM and use XPath to get links
             Document doc = XMLHelper.parseDOMFromString(content);
             NodeList linkNodes = (NodeList) xpath.evaluate(parserConfig.getBreedLinksXPath(), doc, XPathConstants.NODESET);
-            System.out.println(p.getBreed() + ": " + linkNodes.getLength());
+            System.out.println(p.getPetType() + ": " + linkNodes.getLength());
             for (int i = 0; i < linkNodes.getLength(); i++) {
                 String link = linkNodes.item(i).getNodeValue();
                 link = resolveFullUrl(link);

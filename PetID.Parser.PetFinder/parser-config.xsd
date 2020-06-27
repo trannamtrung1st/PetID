@@ -12,7 +12,7 @@
               <xs:element maxOccurs="unbounded" name="page">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="breed" type="xs:string" />
+                    <xs:element name="petType" type="xs:string" />
                     <xs:element name="url" type="xs:string" />
                   </xs:sequence>
                 </xs:complexType>

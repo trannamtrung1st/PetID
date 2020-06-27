@@ -4,11 +4,11 @@
   <getAllBreeds>true</getAllBreeds>
   <allBreedsPages>
 	<page>
-		<breed>Cat</breed>
+		<petType>Cat</petType>
 		<url>https://www.petfinder.com/cat-breeds</url>
 	</page>
 	<page>
-		<breed>Dog</breed>
+		<petType>Dog</petType>
 		<url>https://www.petfinder.com/dog-breeds</url>
 	</page>
   </allBreedsPages>
