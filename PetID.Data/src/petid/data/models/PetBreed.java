@@ -37,7 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "PetBreed.findByImageUrl", query = "SELECT p FROM PetBreed p WHERE p.imageUrl = :imageUrl")
     , @NamedQuery(name = "PetBreed.findByAvailableUrl", query = "SELECT p FROM PetBreed p WHERE p.availableUrl = :availableUrl")
     , @NamedQuery(name = "PetBreed.findByIsAvailableParsed", query = "SELECT p FROM PetBreed p WHERE p.isAvailableParsed = :isAvailableParsed")
-    , @NamedQuery(name = "PetBreed.findByIsBreedImagesParsed", query = "SELECT p FROM PetBreed p WHERE p.isBreedImagesParsed = :isBreedImagesParsed")})
+    , @NamedQuery(name = "PetBreed.findByIsBreedImagesParsed", query = "SELECT p FROM PetBreed p WHERE p.isBreedImagesParsed = :isBreedImagesParsed")
+    , @NamedQuery(name = "PetBreed.findByDogilyCodeMapping", query = "SELECT p FROM PetBreed p WHERE p.dogilyCodeMapping = :dogilyCodeMapping")})
 public class PetBreed implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,6 +58,8 @@ public class PetBreed implements Serializable {
     private String availableUrl;
     private Boolean isAvailableParsed;
     private Boolean isBreedImagesParsed;
+    @Column(length = 50)
+    private String dogilyCodeMapping;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "breedCode")
     private Collection<BreedTrait> breedTraitCollection;
     @JoinColumn(name = "typeName", referencedColumnName = "name", nullable = false)
@@ -136,6 +139,14 @@ public class PetBreed implements Serializable {
 
     public void setIsBreedImagesParsed(Boolean isBreedImagesParsed) {
         this.isBreedImagesParsed = isBreedImagesParsed;
+    }
+
+    public String getDogilyCodeMapping() {
+        return dogilyCodeMapping;
+    }
+
+    public void setDogilyCodeMapping(String dogilyCodeMapping) {
+        this.dogilyCodeMapping = dogilyCodeMapping;
     }
 
     @XmlTransient
