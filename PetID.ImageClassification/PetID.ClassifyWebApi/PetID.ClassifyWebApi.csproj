@@ -26,10 +26,4 @@
     <ProjectReference Include="..\PetID.ImageClassificationML.Model\PetID.ImageClassificationML.Model.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="MLModel.zip">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

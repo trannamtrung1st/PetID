@@ -23,7 +23,7 @@ namespace PetID.ClassifyWebApi.Controllers
         private ConsumeModel _consumeModel;
 
         [HttpPost("")]
-        public IActionResult Create(IFormFile file)
+        public IActionResult Create(IFormFile file, int top_count = 5)
         {
             var bytes = new byte[file.Length];
             using (var ms = new MemoryStream(bytes))
@@ -34,7 +34,7 @@ namespace PetID.ClassifyWebApi.Controllers
             var output = _consumeModel.Predict(new ModelInput
             {
                 ImageRaw = bytes
-            });
+            }, top_count);
             return Ok(output);
         }
 

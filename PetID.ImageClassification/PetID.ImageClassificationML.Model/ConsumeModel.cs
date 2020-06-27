@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.ML;
+using Microsoft.ML.Data;
 
 namespace PetID.ImageClassificationML.Model
 {
@@ -22,11 +23,30 @@ namespace PetID.ImageClassificationML.Model
 
         // For more info on consuming ML.NET models, visit https://aka.ms/model-builder-consume
         // Method for consuming model in your app
-        public ModelOutput Predict(ModelInput input)
+        public ModelOutputViewModel Predict(ModelInput input, int topCount = 5)
         {
             // Use model to make prediction on input data
             ModelOutput result = _predictionEngine.Predict(input);
-            return result;
+            var labelNames = new List<string>();
+            var column = _predictionEngine.OutputSchema.GetColumnOrNull("Label");
+            if (column.HasValue)
+            {
+                VBuffer<ReadOnlyMemory<char>> vbuffer = new VBuffer<ReadOnlyMemory<char>>();
+                column.Value.GetKeyValues(ref vbuffer);
+
+                foreach (ReadOnlyMemory<char> denseValue in vbuffer.DenseValues())
+                    labelNames.Add(denseValue.ToString());
+            }
+            var topOutputs = result.Score.Select((s, i) => new TopOutput
+            {
+                Label = labelNames[i],
+                Score = s
+            }).OrderByDescending(o => o.Score).Take(topCount).ToList();
+            return new ModelOutputViewModel
+            {
+                Prediction = result.Prediction,
+                TopOutputs = topOutputs
+            };
         }
     }
 }

@@ -18,7 +18,7 @@ namespace PetID.ImageClassificationML.ConsoleApp
 
         static void Main(string[] args)
         {
-            CreateModel();
+            TestConsumeModel();
         }
 
         static void PrepareDataFile()
