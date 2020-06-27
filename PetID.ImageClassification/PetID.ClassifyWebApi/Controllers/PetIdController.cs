@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http;
 using PetID.ImageClassificationML.Model;
 using System.IO;
+using System.Net.Mime;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace PetID.ClassifyWebApi.Controllers
 {
@@ -22,6 +25,8 @@ namespace PetID.ClassifyWebApi.Controllers
         [Inject]
         private ConsumeModel _consumeModel;
 
+        [Produces(MediaTypeNames.Application.Json, MediaTypeNames.Application.Xml,
+            Type = typeof(ModelOutputViewModel))]
         [HttpPost("")]
         public IActionResult Create(IFormFile file, int top_count = 5)
         {

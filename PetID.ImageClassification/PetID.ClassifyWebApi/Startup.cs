@@ -36,6 +36,7 @@ namespace PetID.ClassifyWebApi
             services.AddServiceInjection();
             services.AddSingleton(new ConsumeModel(Settings.Instance.ModelPath));
             services.AddControllers()
+                .AddXmlSerializerFormatters()
                 .AddNewtonsoftJson();
             services.AddSwaggerGenNewtonsoftSupport();
             // Register the Swagger generator, defining 1 or more Swagger documents

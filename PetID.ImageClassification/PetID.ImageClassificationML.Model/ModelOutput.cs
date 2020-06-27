@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Microsoft.ML.Data;
 using Newtonsoft.Json;
 
@@ -16,17 +17,25 @@ namespace PetID.ImageClassificationML.Model
         public float[] Score { get; set; }
     }
 
+
+    [XmlRoot("modelOutput")]
     public class ModelOutputViewModel
     {
+        [XmlElement("prediction")]
         [JsonProperty("prediction")]
         public string Prediction { get; set; }
+        [XmlArray("topOutputs")]
+        [XmlArrayItem("topOutput")]
         [JsonProperty("top_outputs")]
-        public IEnumerable<TopOutput> TopOutputs { get; set; }
+        public List<TopOutput> TopOutputs { get; set; }
     }
 
+    [XmlRoot("topOutput")]
     public class TopOutput
     {
+        [XmlElement("label")]
         public string Label { get; set; }
+        [XmlElement("score")]
         public float Score { get; set; }
     }
 }
