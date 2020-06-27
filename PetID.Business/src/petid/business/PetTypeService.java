@@ -36,14 +36,20 @@ public class PetTypeService {
         return petTypeDAO.nativeQuery("DELETE FROM PetType").executeUpdate();
     }
 
-    public PetType findPetTypeByName(String name){
+    public PetType findPetTypeByName(String name) {
         String sql = "SELECT * FROM PetType WHERE name=?name";
         Query query = petTypeDAO.nativeQuery(sql, PetType.class).setParameter("name", name);
         List<PetType> list = query.getResultList();
         return list.size() > 0 ? list.get(0) : null;
     }
-    
+
     public PetType createPetType(PetType entity) {
         return petTypeDAO.create(entity);
+    }
+
+    public void validateForCreate(PetType entity) throws Exception {
+        if (entity.getName() == null || entity.getName().trim().isEmpty()) {
+            throw new Exception("name not valid");
+        }
     }
 }

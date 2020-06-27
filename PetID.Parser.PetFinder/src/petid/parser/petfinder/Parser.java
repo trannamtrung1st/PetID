@@ -9,13 +9,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBException;
+import javax.persistence.EntityManager;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -25,8 +23,6 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -34,7 +30,13 @@ import javax.xml.xpath.XPathExpressionException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import petid.helper.FileHelper;
+import petid.business.PetBreedService;
+import petid.business.PetTypeService;
+import petid.data.models.BreedAttr;
+import petid.data.models.BreedInfo;
+import petid.data.models.BreedTrait;
+import petid.data.models.PetBreed;
+import petid.data.models.PetType;
 import petid.helper.HttpHelper;
 import petid.helper.RegexHelper;
 import petid.helper.XMLHelper;
@@ -51,20 +53,29 @@ public class Parser {
     protected XmlParserConfig xmlParserConfig;
     protected ParserConfig parserConfig;
     protected XPath xpath;
-    protected Set<String> breedLinks;
     protected Templates breedTemplate;
     protected Validator breedValidator;
+    protected PetTypeService petTypeService;
+    protected PetBreedService petBreedService;
+    protected EntityManager entityManager;
+    protected Map<String, PetType> breedLinks;
 
     public Parser(
+            EntityManager entityManager,
+            PetTypeService petTypeService,
+            PetBreedService petBreedService,
             Validator breedValidator,
             Templates breedTemplate,
             XmlParserConfig xmlParserConfig,
             ParserConfig parserConfig) {
+        this.petBreedService = petBreedService;
         this.xmlParserConfig = xmlParserConfig;
+        this.petTypeService = petTypeService;
         this.parserConfig = parserConfig;
         this.xpath = XMLHelper.getXPath();
-        this.breedLinks = new HashSet<>();
+        this.breedLinks = new HashMap<>();
         this.breedTemplate = breedTemplate;
+        this.entityManager = entityManager;
         this.breedValidator = breedValidator;
     }
 
@@ -80,36 +91,53 @@ public class Parser {
         }
     }
 
-    protected void getAllBreeds() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+    protected void getAllBreeds() throws ParserConfigurationException, SAXException, IOException, XPathExpressionException, Exception {
         for (ParserConfig.AllBreedsPages.Page p : parserConfig.getAllBreedsPages().getPage()) {
+            PetType petType = getOrCreatePetType(p);
             String content = preprocess(p.getUrl());
 //            FileHelper.writeToFile(content, "temp.html");
             //parse DOM and use XPath to get links
             Document doc = XMLHelper.parseDOMFromString(content);
             NodeList linkNodes = (NodeList) xpath.evaluate(parserConfig.getBreedLinksXPath(), doc, XPathConstants.NODESET);
-            System.out.println(p.getPetType() + ": " + linkNodes.getLength());
+            System.out.println(petType.getName() + ": " + linkNodes.getLength());
             for (int i = 0; i < linkNodes.getLength(); i++) {
                 String link = linkNodes.item(i).getNodeValue();
                 link = resolveFullUrl(link);
-                breedLinks.add(link);
+                breedLinks.put(link, petType);
             }
         }
     }
 
+    protected PetType getOrCreatePetType(ParserConfig.AllBreedsPages.Page breedPage) throws Exception {
+        String typeName = breedPage.getPetType();
+        PetType entity = petTypeService.findPetTypeByName(typeName);
+        if (entity == null) {
+            entity = new PetType();
+            entity.setName(typeName);
+            petTypeService.validateForCreate(entity);
+            entityManager.getTransaction().begin();
+            petTypeService.createPetType(entity);
+            entityManager.getTransaction().commit();
+        }
+        return entity;
+    }
+
     protected void parseBreedLinks() {
         BreedItem currentBreed = null;
-        for (String bLinks : breedLinks) {
+        for (Map.Entry<String, PetType> kvp : breedLinks.entrySet()) {
             try {
-                System.out.println("Start parsing page: " + bLinks);
-                String pageContent = preprocess(bLinks);
+                String link = kvp.getKey();
+                PetType petType = kvp.getValue();
+                System.out.println("Start parsing page: " + link);
+                String pageContent = preprocess(link);
 //                FileHelper.writeToFile(pageContent, "temp.html");
-                String modelXml = transform(bLinks, pageContent);
+                String modelXml = transform(link, pageContent);
                 validateBreedXml(modelXml);
 //                FileHelper.writeToFile(modelXml, "temp.xml");
                 currentBreed = XMLHelper.unmarshallDocXml(modelXml, petid.parser.petfinder.models.xmlschema.ObjectFactory.class);
                 System.out.println(currentBreed.getBreedName());
-//                processJobItem(currentBreed);
-                System.out.println("Finish parsing page: " + bLinks);
+                processBreedItem(currentBreed, petType);
+                System.out.println("Finish parsing page: " + kvp);
                 System.out.println("------------------------");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -142,6 +170,44 @@ public class Parser {
         // to the output file
         xformer.transform(source, result);
         return writer.toString();
+    }
+
+    protected void processBreedItem(BreedItem item, PetType petType) throws ParseException, Exception {
+        boolean existed = petBreedService.petBreedCodeExists(item.getCode());
+        if (!existed) {
+            //TODO: move String to config
+            PetBreed entity = new PetBreed();
+            entity.setAvailableUrl(item.getAvailableUrl());
+            entity.setCode(item.getCode());
+            entity.setDescription(item.getDescription());
+            entity.setImageUrl(item.getImageUrl());
+            entity.setIsAvailableParsed(false);
+            entity.setIsBreedImagesParsed(false);
+            entity.setName(item.getBreedName());
+            entity.setTypeName(petType);
+            entity.setUrl(item.getUrl());
+            for (BreedItem.Traits.Item trait : item.getTraits().getItem()) {
+                BreedTrait model = new BreedTrait();
+                model.setName(trait.getName());
+                model.setValue(trait.getValue());
+                petBreedService.addPetBreedTrait(entity, model);
+            }
+            for (BreedItem.Attributes.Item trait : item.getAttributes().getItem()) {
+                BreedAttr model = new BreedAttr();
+                model.setName(trait.getName());
+                model.setValue(trait.getValue());
+                petBreedService.addPetBreedAttr(entity, model);
+            }
+            for (BreedItem.Sections.Item section : item.getSections().getItem()) {
+                BreedInfo model = new BreedInfo();
+                model.setName(section.getName());
+                model.setSectionContent(section.getValue());
+                petBreedService.addPetBreedInfo(entity, model);
+            }
+            entityManager.getTransaction().begin();
+            petBreedService.createPetBreed(entity);
+            entityManager.getTransaction().commit();
+        }
     }
 
     protected String preprocess(String url) throws IOException {
