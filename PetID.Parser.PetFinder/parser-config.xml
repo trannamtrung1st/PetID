@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parserConfig xmlns="http://petid.com/xml/parser-config">
+  <baseUrl>https://www.petfinder.com</baseUrl>
+  <getAllBreeds>true</getAllBreeds>
+  <allBreedsPages>
+	<page>
+		<breed>Cat</breed>
+		<url>https://www.petfinder.com/cat-breeds</url>
+	</page>
+	<page>
+		<breed>Dog</breed>
+		<url>https://www.petfinder.com/dog-breeds</url>
+	</page>
+  </allBreedsPages>
+  <breedLinksXPath><![CDATA[//*[@class='breedAutoSuggest-listboxTemp-dropdownItem']/parent::a/@href]]></breedLinksXPath>
+</parserConfig>
