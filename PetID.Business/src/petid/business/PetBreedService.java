@@ -10,6 +10,8 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import petid.data.daos.BreedAttrDAO;
@@ -45,11 +47,26 @@ public class PetBreedService {
         this.breedInfoDAO = breedInfoDAO;
     }
 
+    public PetBreed findPetBreedByCode(String code) {
+        String sql = "SELECT * FROM PetType WHERE code=?code";
+        Query query = petBreedDAO.nativeQuery(sql, PetBreed.class).setParameter("code", code);
+        List<PetBreed> list = query.getResultList();
+        return list.size() > 0 ? list.get(0) : null;
+    }
+
     public boolean petBreedCodeExists(String code) {
         String sql = "SELECT COUNT(code) FROM PetBreed WHERE code=?code";
         Query query = petBreedDAO.nativeQuery(sql).setParameter("code", code);
         Integer count = (Integer) query.getSingleResult();
         return count > 0;
+    }
+
+    public <In, T> List<T> queryAllUnparsedImagesBreeds(Function<In, T> mapping, String... fields) {
+        String fieldJoin = String.join(",", fields);
+        String sql = "SELECT " + fieldJoin + " FROM PetBreed where isBreedImagesParsed=0";
+        Query query = petBreedDAO.nativeQuery(sql);
+        List<In> list = query.getResultList();
+        return list.stream().map(mapping).collect(Collectors.toList());
     }
 
     public List<String> getAllPetBreedCodes() {
@@ -68,6 +85,10 @@ public class PetBreedService {
 
     public PetBreed createPetBreed(PetBreed entity) {
         return petBreedDAO.create(entity);
+    }
+
+    public void updatePetBreedImageParsed(PetBreed entity, boolean value) {
+        entity.setIsBreedImagesParsed(value);
     }
 
     public void addPetBreedTrait(PetBreed entity, BreedTrait model) {

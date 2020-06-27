@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parserConfig xmlns="http://petid.com/xml/parser-config">
+  <baseUrl>https://www.google.com</baseUrl>
+  <saveFolder><![CDATA[T:\FPT\STUDY\SUMMER2020\PRX\Project\PetID\PetID.ImageClassification\PetID.ImageClassificationML.ConsoleApp\Data\training]]></saveFolder>
+  <imgXPath><![CDATA[//img[@data-src]/@data-src]]></imgXPath>
+  <searchPlaceholder>https://www.google.com/search?q={search}&amp;tbm=isch</searchPlaceholder>
+</parserConfig>
