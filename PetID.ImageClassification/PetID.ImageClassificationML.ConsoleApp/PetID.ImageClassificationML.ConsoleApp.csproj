@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PetID.ImageClassificationML.Model\PetID.ImageClassificationML.Model.csproj" />
+    <ProjectReference Include="..\PetID.ImageClassification\PetID.ImageClassification.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Data\data.tsv">

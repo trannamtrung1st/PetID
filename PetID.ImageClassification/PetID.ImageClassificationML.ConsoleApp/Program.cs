@@ -5,21 +5,36 @@ using System.IO;
 using System.Linq;
 using Microsoft.ML;
 using Newtonsoft.Json;
+using PetID.ImageClassification;
 using PetID.ImageClassificationML.Model;
 
-namespace PetID_ImageClassificationML.ConsoleApp
+namespace PetID.ImageClassificationML.ConsoleApp
 {
     class Program
     {
         //Dataset to use for predictions 
         private const string DATA_FILEPATH = @"Data/data.tsv";
+        private const string DATA_TRAINING_PATH = @"Data/training";
 
         static void Main(string[] args)
         {
-            //Create MLModel
-            //ModelBuilder.CreateModel();
+        }
 
-            //Consume
+        static void PrepareDataFile()
+        {
+        }
+
+        static void CreateModel()
+        {
+            Preprocessor.ResizeAll(DATA_TRAINING_PATH, true);
+            Preprocessor.DeleteAllRaw(DATA_TRAINING_PATH, true);
+            Preprocessor.FlipAll(DATA_TRAINING_PATH, true);
+            Preprocessor.LoadDatasetAndSaveToTsv(DATA_TRAINING_PATH, DATA_FILEPATH);
+            ModelBuilder.CreateModel();
+        }
+
+        static void TestConsumeModel()
+        {
             var model = new ConsumeModel("MLModel.zip");
             var output = model.Predict(new ModelInput
             {

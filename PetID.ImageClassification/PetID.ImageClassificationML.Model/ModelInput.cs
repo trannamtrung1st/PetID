@@ -4,7 +4,7 @@ using Microsoft.ML.Data;
 
 namespace PetID.ImageClassificationML.Model
 {
-    public class ModelInput : TraningModel
+    public class ModelInput : TrainingModel
     {
         public byte[] ImageRaw { get; set; }
     }

@@ -9,7 +9,7 @@ using Microsoft.ML.Data;
 using Microsoft.ML.Vision;
 using PetID.ImageClassificationML.Model;
 
-namespace PetID_ImageClassificationML.ConsoleApp
+namespace PetID.ImageClassificationML.ConsoleApp
 {
     public static class ModelBuilder
     {
@@ -22,7 +22,7 @@ namespace PetID_ImageClassificationML.ConsoleApp
         public static void CreateModel()
         {
             // Load Data
-            IDataView trainingDataView = mlContext.Data.LoadFromTextFile<TraningModel>(
+            IDataView trainingDataView = mlContext.Data.LoadFromTextFile<TrainingModel>(
                                             path: TRAIN_DATA_FILEPATH,
                                             hasHeader: true,
                                             separatorChar: '\t',

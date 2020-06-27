@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PetID.ImageClassificationML.Model
 {
-    public class TraningModel
+    public class TrainingModel
     {
         [ColumnName("Label"), LoadColumn(0)]
         public string Label { get; set; }
