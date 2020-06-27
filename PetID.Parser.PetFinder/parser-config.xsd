@@ -21,6 +21,7 @@
           </xs:complexType>
         </xs:element>
         <xs:element name="breedLinksXPath" type="xs:string" />
+        <xs:element name="breedCodeFromUrlRegex" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -3,14 +3,15 @@
   <baseUrl>https://www.petfinder.com</baseUrl>
   <getAllBreeds>true</getAllBreeds>
   <allBreedsPages>
-	<page>
-		<petType>Cat</petType>
-		<url>https://www.petfinder.com/cat-breeds</url>
-	</page>
-	<page>
-		<petType>Dog</petType>
-		<url>https://www.petfinder.com/dog-breeds</url>
-	</page>
+    <page>
+      <petType>Cat</petType>
+      <url>https://www.petfinder.com/cat-breeds</url>
+    </page>
+    <page>
+      <petType>Dog</petType>
+      <url>https://www.petfinder.com/dog-breeds</url>
+    </page>
   </allBreedsPages>
   <breedLinksXPath><![CDATA[//*[@class='breedAutoSuggest-listboxTemp-dropdownItem']/parent::a/@href]]></breedLinksXPath>
+  <breedCodeFromUrlRegex><![CDATA[^.*[/]([a-zA-Z0-9\\-]+?)[/]$]]></breedCodeFromUrlRegex>
 </parserConfig>

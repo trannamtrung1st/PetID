@@ -45,6 +45,7 @@ import javax.xml.bind.annotation.XmlType;
  *           &lt;/complexType>
  *         &lt;/element>
  *         &lt;element name="breedLinksXPath" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="breedCodeFromUrlRegex" type="{http://www.w3.org/2001/XMLSchema}string"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -58,7 +59,8 @@ import javax.xml.bind.annotation.XmlType;
     "baseUrl",
     "getAllBreeds",
     "allBreedsPages",
-    "breedLinksXPath"
+    "breedLinksXPath",
+    "breedCodeFromUrlRegex"
 })
 @XmlRootElement(name = "parserConfig")
 public class ParserConfig {
@@ -70,6 +72,8 @@ public class ParserConfig {
     protected ParserConfig.AllBreedsPages allBreedsPages;
     @XmlElement(required = true)
     protected String breedLinksXPath;
+    @XmlElement(required = true)
+    protected String breedCodeFromUrlRegex;
 
     /**
      * Gets the value of the baseUrl property.
@@ -157,6 +161,30 @@ public class ParserConfig {
      */
     public void setBreedLinksXPath(String value) {
         this.breedLinksXPath = value;
+    }
+
+    /**
+     * Gets the value of the breedCodeFromUrlRegex property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getBreedCodeFromUrlRegex() {
+        return breedCodeFromUrlRegex;
+    }
+
+    /**
+     * Sets the value of the breedCodeFromUrlRegex property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setBreedCodeFromUrlRegex(String value) {
+        this.breedCodeFromUrlRegex = value;
     }
 
 
