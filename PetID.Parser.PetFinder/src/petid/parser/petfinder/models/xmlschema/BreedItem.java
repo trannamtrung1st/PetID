@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="item" maxOccurs="unbounded">
+ *                   &lt;element name="item" maxOccurs="unbounded" minOccurs="0">
  *                     &lt;complexType>
  *                       &lt;complexContent>
  *                         &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -67,7 +67,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="item" maxOccurs="unbounded">
+ *                   &lt;element name="item" maxOccurs="unbounded" minOccurs="0">
  *                     &lt;complexType>
  *                       &lt;complexContent>
  *                         &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -89,7 +89,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="item" maxOccurs="unbounded">
+ *                   &lt;element name="item" maxOccurs="unbounded" minOccurs="0">
  *                     &lt;complexType>
  *                       &lt;complexContent>
  *                         &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -372,7 +372,7 @@ public class BreedItem {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="item" maxOccurs="unbounded">
+     *         &lt;element name="item" maxOccurs="unbounded" minOccurs="0">
      *           &lt;complexType>
      *             &lt;complexContent>
      *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -398,7 +398,6 @@ public class BreedItem {
     })
     public static class Attributes {
 
-        @XmlElement(required = true)
         protected List<BreedItem.Attributes.Item> item;
 
         /**
@@ -526,7 +525,7 @@ public class BreedItem {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="item" maxOccurs="unbounded">
+     *         &lt;element name="item" maxOccurs="unbounded" minOccurs="0">
      *           &lt;complexType>
      *             &lt;complexContent>
      *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -552,7 +551,6 @@ public class BreedItem {
     })
     public static class Sections {
 
-        @XmlElement(required = true)
         protected List<BreedItem.Sections.Item> item;
 
         /**
@@ -680,7 +678,7 @@ public class BreedItem {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="item" maxOccurs="unbounded">
+     *         &lt;element name="item" maxOccurs="unbounded" minOccurs="0">
      *           &lt;complexType>
      *             &lt;complexContent>
      *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
@@ -706,7 +704,6 @@ public class BreedItem {
     })
     public static class Traits {
 
-        @XmlElement(required = true)
         protected List<BreedItem.Traits.Item> item;
 
         /**

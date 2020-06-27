@@ -27,7 +27,7 @@
         <xs:element name="traits" minOccurs="0">
           <xs:complexType>
             <xs:sequence>
-              <xs:element maxOccurs="unbounded" name="item">
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="item">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="name" type="xs:string" />
@@ -41,7 +41,7 @@
         <xs:element name="attributes" minOccurs="0">
           <xs:complexType>
             <xs:sequence>
-              <xs:element maxOccurs="unbounded" name="item">
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="item">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="name" type="xs:string" />
@@ -55,7 +55,7 @@
         <xs:element name="sections" minOccurs="0">
           <xs:complexType>
             <xs:sequence>
-              <xs:element maxOccurs="unbounded" name="item">
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="item">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="name" type="xs:string" />
