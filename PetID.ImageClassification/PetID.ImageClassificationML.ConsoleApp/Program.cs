@@ -13,11 +13,12 @@ namespace PetID.ImageClassificationML.ConsoleApp
     class Program
     {
         //Dataset to use for predictions 
-        private const string DATA_FILEPATH = @"Data/data.tsv";
-        private const string DATA_TRAINING_PATH = @"Data/training";
+        private const string DATA_FILEPATH = @"T:\FPT\STUDY\SUMMER2020\PRX\Project\PetID\PetID.ImageClassification\PetID.ImageClassificationML.ConsoleApp\Data\data.tsv";
+        private const string DATA_TRAINING_PATH = @"T:\FPT\STUDY\SUMMER2020\PRX\Project\PetID\PetID.ImageClassification\PetID.ImageClassificationML.ConsoleApp\Data\training\";
 
         static void Main(string[] args)
         {
+            CreateModel();
         }
 
         static void PrepareDataFile()
@@ -26,11 +27,12 @@ namespace PetID.ImageClassificationML.ConsoleApp
 
         static void CreateModel()
         {
-            Preprocessor.ResizeAll(DATA_TRAINING_PATH, true);
-            Preprocessor.DeleteAllRaw(DATA_TRAINING_PATH, true);
-            Preprocessor.FlipAll(DATA_TRAINING_PATH, true);
-            Preprocessor.LoadDatasetAndSaveToTsv(DATA_TRAINING_PATH, DATA_FILEPATH);
-            ModelBuilder.CreateModel();
+            //Preprocessor.ResizeAll(DATA_TRAINING_PATH, true);
+            //Preprocessor.DeleteAllRaw(DATA_TRAINING_PATH, true);
+            //Preprocessor.FlipAll(DATA_TRAINING_PATH, true);
+            Preprocessor.LoadDatasetAndSaveToTsv(new[] { "Label", "ImageSource" },
+                DATA_TRAINING_PATH, DATA_FILEPATH);
+            ModelBuilder.CreateModel(DATA_FILEPATH);
         }
 
         static void TestConsumeModel()

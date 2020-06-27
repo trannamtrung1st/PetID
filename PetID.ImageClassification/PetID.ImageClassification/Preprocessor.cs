@@ -11,7 +11,9 @@ namespace PetID.ImageClassification
     public class Preprocessor
     {
 
-        public static void LoadDatasetAndSaveToTsv(string datasetPath, string tsvPath)
+        public static void LoadDatasetAndSaveToTsv(
+            string[] headers,
+            string datasetPath, string tsvPath)
         {
             var files = Directory.GetFiles(datasetPath, "*",
                 searchOption: SearchOption.AllDirectories);
@@ -28,6 +30,7 @@ namespace PetID.ImageClassification
                 });
             }
             var tsv = new StringBuilder("");
+            tsv.AppendLine(string.Join('\t', headers));
             foreach (var d in trainingData)
             {
                 tsv.AppendLine($"{d.Label}\t{d.ImageSource}");

@@ -13,17 +13,16 @@ namespace PetID.ImageClassificationML.ConsoleApp
 {
     public static class ModelBuilder
     {
-        private static string TRAIN_DATA_FILEPATH = @"Data/data.tsv";
         private static string MODEL_FILEPATH = @"MLModel.zip";
         // Create MLContext to be shared across the model creation workflow objects 
         // Set a random seed for repeatable/deterministic results across multiple trainings.
         private static MLContext mlContext = new MLContext(seed: 1);
 
-        public static void CreateModel()
+        public static void CreateModel(string trainDataFile)
         {
             // Load Data
             IDataView trainingDataView = mlContext.Data.LoadFromTextFile<TrainingModel>(
-                                            path: TRAIN_DATA_FILEPATH,
+                                            path: trainDataFile,
                                             hasHeader: true,
                                             separatorChar: '\t',
                                             allowQuoting: true,
