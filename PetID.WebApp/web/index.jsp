@@ -66,13 +66,13 @@
         <div id="top-outputs">
         </div>
         <hr/>
-        <form id="search-form" method="GET" >
+        <form id="search-form" method="GET" onsubmit="return validateSearchPostback();">
             <div>
                 <h3>Or search breed's name: </h3>
                 <input type="text" name="q" value="${param.q}"/>
             </div>
             <div>
-                <input type="submit" value="SUBMIT"/>
+                <input type="submit" value="SUBMIT" />
             </div>
         </form>
         <hr/>
@@ -82,7 +82,9 @@
             </x:transform>
         </c:if>
         <script>
+            let guestEnabled = true;
             document.querySelector("#upload-form input[name=file]").onchange = function (e) {
+                guestEnabled = true;
                 var reader = new FileReader();
                 reader.onload = function (e) {
                     // get loaded data and render thumbnail.
@@ -98,6 +100,13 @@
                     document.querySelector("#upload-form img").setAttribute("class", "d-none");
                 }
             };
+
+            function validateSearchPostback() {
+                let value = document.querySelector("#search-form input[name=q]").value;
+                if (value === '${param.q}')
+                    return false;
+                return true;
+            }
 
             let breedsXML = '${listXml}';
             let xmlDoc = getXMLDoc(breedsXML);
@@ -116,6 +125,9 @@
             }
 
             function guestPetByImage() {
+                if (!guestEnabled)
+                    return;
+                guestEnabled = false;
                 let topOutputs = document.getElementById("top-outputs");
                 topOutputs.innerHTML = "";
                 var value = document.querySelector("#upload-form input[name=file]").value;
