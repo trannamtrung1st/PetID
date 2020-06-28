@@ -35,7 +35,9 @@ public class AppContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext sContext = sce.getServletContext();
-        Settings.baseApiUrl = sContext.getInitParameter("baseApiUrl");
+        Settings.baseApiUrl = sContext.getInitParameter(Constants.BASE_API_URL);
+        sContext.setAttribute(Constants.BASE_API_URL, Settings.baseApiUrl);
+
         try (EntityContext eContext = EntityContext.newInstance()) {
             EntityManager em = eContext.getEntityManager();
 
@@ -49,6 +51,17 @@ public class AppContextListener implements ServletContextListener {
             sContext.setAttribute(Constants.BREEDS_XML_CACHE_NAME, xml);
             sContext.setAttribute(Constants.BREEDS_COUNT_CACHE_NAME, entities.size());
             //end --- cache PetBreeds
+
+            //cache list-breeds.xsl
+            String path = sContext.getRealPath("/WEB-INF/list-breeds.xsl");
+            String listBreedsXsl = FileHelper.readContent(path);
+            sContext.setAttribute(Constants.BREEDS_XSL_CACHE_NAME, listBreedsXsl);
+
+            //cache top-output.xsl
+            path = sContext.getRealPath("/WEB-INF/top-output.xsl");
+            String topoutputXsl = FileHelper.readContent(path).replace("\n", "");
+            sContext.setAttribute(Constants.TOP_OUTPUT_XSL_CACHE_NAME, topoutputXsl);
+
         } catch (Exception ex) {
             Logger.getLogger(AppContextListener.class.getName()).log(Level.SEVERE, null, ex);
         }

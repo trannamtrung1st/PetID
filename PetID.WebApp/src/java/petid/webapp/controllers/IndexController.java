@@ -91,8 +91,14 @@ public class IndexController extends BaseController {
         ServletContext sContext = getServletContext();
         Integer count = (Integer) sContext.getAttribute(Constants.BREEDS_COUNT_CACHE_NAME);
         String listXml = (String) sContext.getAttribute(Constants.BREEDS_XML_CACHE_NAME);
+        String xsl = (String) sContext.getAttribute(Constants.BREEDS_XSL_CACHE_NAME);
+        String topXsl = (String) sContext.getAttribute(Constants.TOP_OUTPUT_XSL_CACHE_NAME);
+
         request.setAttribute("count", count);
         request.setAttribute("listXml", listXml);
+        request.setAttribute("xsl", xsl);
+        request.setAttribute("topXsl", topXsl);
+
         response.setContentType("text/html;charset=UTF-8");
         request.getRequestDispatcher(INDEX).forward(request, response);
     }

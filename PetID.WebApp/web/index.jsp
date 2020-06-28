@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/xml" prefix="x" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,20 +17,164 @@
                 text-align: center;
                 color: green;
             }
+
+            .img-preview{
+                padding: 10px;
+                width: 25%;
+            }
+
+            .breed-item {
+                vertical-align: top;
+                padding: 10px;
+                display: inline-block;
+                width: 30%;
+            }
+
+            .breed-item img {
+                width: 100%;
+            }
+
+            .breed-item h4 {
+                color: red;
+            }
+
+            .d-none {
+                display: none;
+            }
+
+            hr {
+                margin: 50px 0;
+            }
         </style>
     </head>
     <body>
-        <h1 class="page-title">WELCOME TO PETID</h1>
+        <h1 class="page-title">WELCOME TO PET-ID</h1>
         <h1>We have ${count} breeds of pet (cat & dog)</h1>
-        <form method="POST" enctype="multipart/form-data" action="${pageContext.request.contextPath}">
+        <form id="upload-form" method="POST" enctype="multipart/form-data" >
             <input type="hidden" name="action" value="submit_image"/>
             <div>
-                Upload an image and let we guest what it is: 
+                <h3>Upload an image and let we guest what it is: </h3>
                 <input type="file" name="file" accept="image/*"/>
+            </div>
+            <div>
+                <img class="d-none"/>
+            </div>
+            <div>
+                <button type="button" onclick="guestPetByImage()">SUBMIT</button>
+            </div>
+        </form>
+        <div id="top-outputs">
+        </div>
+        <hr/>
+        <form id="search-form" method="GET" >
+            <div>
+                <h3>Or search breed's name: </h3>
+                <input type="text" name="q" value="${param.q}"/>
             </div>
             <div>
                 <input type="submit" value="SUBMIT"/>
             </div>
         </form>
+        <hr/>
+        <c:if test="${not empty param.q}">
+            <x:transform doc="${listXml}" xslt="${xsl}">
+                <x:param name = "query" value="${param.q}"/>
+            </x:transform>
+        </c:if>
+        <script>
+            document.querySelector("#upload-form input[name=file]").onchange = function (e) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // get loaded data and render thumbnail.
+                    let src = e.target.result;
+                    let ele = document.querySelector("#upload-form img");
+                    ele.src = src;
+                    ele.setAttribute("class", "img-preview");
+                };
+                // read the image file as a data URL.
+                if (this.files[0])
+                    reader.readAsDataURL(this.files[0]);
+                else {
+                    document.querySelector("#upload-form img").setAttribute("class", "d-none");
+                }
+            };
+
+            let breedsXML = '${listXml}';
+            let xmlDoc = getXMLDoc(breedsXML);
+            let topXsl = getXMLDoc('${topXsl}');
+            function getXMLDoc(xmlStr) {
+                if (window.DOMParser)
+                {
+                    let parser = new DOMParser();
+                    let xmlDoc = parser.parseFromString(xmlStr, "text/xml");
+                    return xmlDoc;
+                }
+                let xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
+                xmlDoc.async = false;
+                xmlDoc.loadXML(xmlStr);
+                return xmlDoc;
+            }
+
+            function guestPetByImage() {
+                let topOutputs = document.getElementById("top-outputs");
+                topOutputs.innerHTML = "";
+                var value = document.querySelector("#upload-form input[name=file]").value;
+                if (!value)
+                    return alert("Choose an image");
+                var form = document.getElementById("upload-form");
+                var formData = new FormData(form);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "${applicationScope.baseApiUrl}/api/pet-id");
+                xhr.setRequestHeader("Accept", "application/xml");
+                xhr.send(formData);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        var status = xhr.status;
+                        if (status === 0 || (status >= 200 && status < 400)) {
+                            // The xhr has been completed successfully
+                            console.log(xhr.responseXML);
+                            processGuestResult(xhr.responseXML);
+                        } else {
+                            alert("Something's wrong");
+                        }
+                    }
+                };
+            }
+
+            function processGuestResult(xml) {
+                let xRes = xpathEval("//topOutput", xml);
+                let count = 1;
+                let currentOutput;
+                while ((currentOutput = xRes.iterateNext())) {
+                    currentOutput = getXMLDoc(currentOutput.outerHTML);
+                    console.log(currentOutput);
+                    let code = null;
+                    code = xpathEval("//label", currentOutput, XPathResult.STRING_TYPE).stringValue;
+                    let score = xpathEval("//score", currentOutput, XPathResult.NUMBER_TYPE).numberValue;
+                    score = parseInt((score * 100).toString());
+                    let topXml = xpathEval("//PetBreed[code='" + code + "']", xmlDoc, XPathResult.FIRST_ORDERED_NODE_TYPE).singleNodeValue;
+                    displayTopResult(topXml, count++, score);
+                }
+            }
+
+            function displayTopResult(xml, top, rate)
+            {
+                console.log(xml);
+                let topOutputs = document.getElementById("top-outputs");
+                if (document.implementation && document.implementation.createDocument)
+                {
+                    let xsltProcessor = new XSLTProcessor();
+                    xsltProcessor.setParameter(null, "top", top.toString());
+                    xsltProcessor.setParameter(null, "rate", rate.toString());
+                    xsltProcessor.importStylesheet(topXsl);
+                    let resultDocument = xsltProcessor.transformToFragment(xml, document);
+                    topOutputs.append(resultDocument);
+                }
+            }
+
+            function xpathEval(expr, xml, type) {
+                return document.evaluate(expr, xml, null, type);
+            }
+        </script>
     </body>
 </html>
