@@ -7,6 +7,7 @@ package petid.parser.dogily;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.persistence.EntityManager;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBException;
@@ -30,20 +31,20 @@ import petid.xmlparser.XmlParserConfig;
  */
 public class Entry {
 
-    public static void main(String[] args) throws JAXBException, TransformerConfigurationException, FileNotFoundException, SAXException {
+    public static void main(String[] args) throws JAXBException, TransformerConfigurationException, FileNotFoundException, SAXException, IOException {
         ParserConfig parserConfig = XMLHelper.unmarshallDocFile("parser-config.xml", ObjectFactory.class);
         XmlParserConfig xmlParserConfig = XMLHelper.unmarshallDocFile("xml-parser-config.xml", petid.xmlparser.ObjectFactory.class);
         Templates postTemplate = XMLHelper.getTemplates("post-items.xsl");
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema postSchema = schemaFactory.newSchema(new File("post-items.xsd"));
         Validator postValidator = postSchema.newValidator();
-
-        EntityContext context = EntityContext.newInstance();
-        EntityManager em = context.getEntityManager();
-        PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
-        PetPostService petPostService = new PetPostService(em, new PetPostDAO(em));
-        Parser parser = new Parser(em, petPostService, petBreedService,
-                postValidator, postTemplate, xmlParserConfig, parserConfig);
-        parser.start();
+        try (EntityContext context = EntityContext.newInstance()) {
+            EntityManager em = context.getEntityManager();
+            PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
+            PetPostService petPostService = new PetPostService(em, new PetPostDAO(em));
+            Parser parser = new Parser(em, petPostService, petBreedService,
+                    postValidator, postTemplate, xmlParserConfig, parserConfig);
+            parser.start();
+        }
     }
 }

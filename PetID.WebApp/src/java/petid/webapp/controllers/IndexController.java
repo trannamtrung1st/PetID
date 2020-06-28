@@ -6,34 +6,33 @@
 package petid.webapp.controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import javax.xml.bind.JAXBException;
+import petid.business.models.xmlschema.ModelOutput;
+import petid.business.services.PetBreedService;
+import petid.data.EntityContext;
+import petid.data.daos.PetBreedDAO;
 
 /**
  *
  * @author TNT
  */
-public class IndexController extends HttpServlet {
+@MultipartConfig
+public class IndexController extends BaseController {
 
     protected final String INDEX = "index.jsp";
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher(INDEX).forward(request, response);
-    }
+    protected final String ACTION_SUBMIT_IMAGE = "submit_image";
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -47,7 +46,7 @@ public class IndexController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        dispatch(request, response);
     }
 
     /**
@@ -61,7 +60,34 @@ public class IndexController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        if (ACTION_SUBMIT_IMAGE.equals(action)) {
+            handleSubmitImage(request, response);
+        } else {
+            throw new RuntimeException("Empty action");
+        }
+    }
+
+    protected void handleSubmitImage(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
+        InputStream fileContent = filePart.getInputStream();
+        String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+        try (EntityContext context = EntityContext.newInstance()) {
+            EntityManager em = context.getEntityManager();
+            PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
+            try {
+                ModelOutput output = petBreedService.predictPetIdByImage(fileContent, fileName, 5);
+                System.out.println(output.getPrediction());
+            } catch (JAXBException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        dispatch(request, response);
+    }
+
+    protected void dispatch(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        response.setContentType("text/html;charset=UTF-8");
+        request.getRequestDispatcher(INDEX).forward(request, response);
     }
 
     /**

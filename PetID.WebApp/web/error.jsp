@@ -20,7 +20,7 @@
         <h2 class="status-code">Status code: ${status_code}</h2>
         <h1>Something's wrong, contact administrator for more information</h1>
         <script>
-            console.log("ex: ${exception.message}");
+            console.log("ex: ${exception_mess}");
             console.log("code: ${status_code}");
             console.log("uri: ${uri}");
         </script>

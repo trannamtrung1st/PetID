@@ -7,6 +7,7 @@ package petid.parser.petfinder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import javax.persistence.EntityManager;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBException;
@@ -19,9 +20,6 @@ import org.xml.sax.SAXException;
 import petid.business.services.PetBreedService;
 import petid.business.services.PetTypeService;
 import petid.data.EntityContext;
-import petid.data.daos.BreedAttrDAO;
-import petid.data.daos.BreedInfoDAO;
-import petid.data.daos.BreedTraitDAO;
 import petid.data.daos.PetBreedDAO;
 import petid.data.daos.PetTypeDAO;
 import petid.helper.XMLHelper;
@@ -33,7 +31,7 @@ import petid.xmlparser.XmlParserConfig;
  */
 public class Entry {
 
-    public static void main(String[] args) throws JAXBException, TransformerConfigurationException, FileNotFoundException, SAXException {
+    public static void main(String[] args) throws JAXBException, TransformerConfigurationException, FileNotFoundException, SAXException, IOException {
         ParserConfig parserConfig = XMLHelper.unmarshallDocFile("parser-config.xml", ObjectFactory.class);
         XmlParserConfig xmlParserConfig = XMLHelper.unmarshallDocFile("xml-parser-config.xml", petid.xmlparser.ObjectFactory.class);
         Templates breedTemplate = XMLHelper.getTemplates("breed-item.xsl");
@@ -41,12 +39,13 @@ public class Entry {
         Schema breedSchema = schemaFactory.newSchema(new File("breed-item.xsd"));
         Validator breedValidator = breedSchema.newValidator();
 
-        EntityContext context = EntityContext.newInstance();
-        EntityManager em = context.getEntityManager();
-        PetTypeService petTypeService = new PetTypeService(em, new PetTypeDAO(em));
-        PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
-        Parser parser = new Parser(em, petTypeService, petBreedService,
-                breedValidator, breedTemplate, xmlParserConfig, parserConfig);
-        parser.start();
+        try (EntityContext context = EntityContext.newInstance()) {
+            EntityManager em = context.getEntityManager();
+            PetTypeService petTypeService = new PetTypeService(em, new PetTypeDAO(em));
+            PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
+            Parser parser = new Parser(em, petTypeService, petBreedService,
+                    breedValidator, breedTemplate, xmlParserConfig, parserConfig);
+            parser.start();
+        }
     }
 }

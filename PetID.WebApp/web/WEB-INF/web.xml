@@ -27,7 +27,7 @@
     </session-config>
     <context-param>
         <param-name>baseApiUrl</param-name>
-        <param-value>http://localhost:61501</param-value>
+        <param-value>http://13.250.59.224:8778</param-value>
     </context-param>
     <error-page>
         <location>/error</location>

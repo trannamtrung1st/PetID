@@ -17,9 +17,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -79,6 +81,16 @@ public class XMLHelper {
         File f = new File(file);
         T obj = (T) ((JAXBElement) u.unmarshal(f)).getValue();
         return obj;
+    }
+
+    public static String marshall(Object obj, Class objClass) throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(objClass);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
+        StringWriter sw = new StringWriter();
+        marshaller.marshal(obj, sw);
+        String xml = sw.toString();
+        return xml;
     }
 
     public static <T> T unmarshallDocFile(String file, Class objectFactoryClass) throws JAXBException {

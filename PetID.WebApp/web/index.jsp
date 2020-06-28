@@ -20,5 +20,15 @@
     <body>
         <h1 class="page-title">WELCOME TO PETID</h1>
         <h1>We have 269 breeds of pet (cat & dog)</h1>
+        <form method="POST" enctype="multipart/form-data" action="${pageContext.request.contextPath}">
+            <input type="hidden" name="action" value="submit_image"/>
+            <div>
+                Upload an image and let we guest what it is: 
+                <input type="file" name="file" accept="image/*"/>
+            </div>
+            <div>
+                <input type="submit" value="SUBMIT"/>
+            </div>
+        </form>
     </body>
 </html>

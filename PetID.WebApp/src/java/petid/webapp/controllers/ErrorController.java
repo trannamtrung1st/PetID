@@ -11,12 +11,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import petid.helper.StringHelper;
 
 /**
  *
  * @author TNT
  */
-public class ErrorController extends HttpServlet {
+public class ErrorController extends BaseController {
 
     protected final String ERROR = "error.jsp";
 
@@ -39,7 +40,10 @@ public class ErrorController extends HttpServlet {
         if (requestUri == null) {
             requestUri = "Unknown";
         }
-        request.setAttribute("exception", throwable);
+        if (throwable != null) {
+            String mess = throwable.getMessage();
+            request.setAttribute("exception_mess", StringHelper.escape(mess));
+        }
         request.setAttribute("status_code", statusCode);
         request.setAttribute("uri", requestUri);
         request.getRequestDispatcher(ERROR).forward(request, response);

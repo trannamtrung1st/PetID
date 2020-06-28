@@ -75,6 +75,13 @@ public class PetBreedService {
         return list.stream().map(mapping).collect(Collectors.toList());
     }
 
+    public List<PetBreed> getAllPetBreeds() {
+        String sql = "SELECT * FROM PetBreed";
+        Query query = petBreedDAO.nativeQuery(sql, PetBreed.class);
+        List<PetBreed> list = query.getResultList();
+        return list;
+    }
+
     public List<String> getAllPetBreedCodes() {
         String sql = "SELECT code FROM PetBreed";
         Query query = petBreedDAO.nativeQuery(sql);

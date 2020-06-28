@@ -33,10 +33,11 @@ public class Entry {
     public static void main(String[] args) throws Exception {
         ParserConfig parserConfig = XMLHelper.unmarshallDocFile("parser-config.xml", ObjectFactory.class);
         XmlParserConfig xmlParserConfig = XMLHelper.unmarshallDocFile("xml-parser-config.xml", petid.xmlparser.ObjectFactory.class);
-        EntityContext context = EntityContext.newInstance();
-        EntityManager em = context.getEntityManager();
-        PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
-        Parser parser = new Parser(em, petBreedService, xmlParserConfig, parserConfig);
-        parser.start();
+        try (EntityContext context = EntityContext.newInstance()) {
+            EntityManager em = context.getEntityManager();
+            PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
+            Parser parser = new Parser(em, petBreedService, xmlParserConfig, parserConfig);
+            parser.start();
+        }
     }
 }
