@@ -48,7 +48,7 @@ public class PetBreedService {
     }
 
     public PetBreed findPetBreedByCode(String code) {
-        String sql = "SELECT * FROM PetType WHERE code=?code";
+        String sql = "SELECT * FROM PetBreed WHERE code=?code";
         Query query = petBreedDAO.nativeQuery(sql, PetBreed.class).setParameter("code", code);
         List<PetBreed> list = query.getResultList();
         return list.size() > 0 ? list.get(0) : null;
@@ -73,6 +73,13 @@ public class PetBreedService {
         String sql = "SELECT code FROM PetBreed";
         Query query = petBreedDAO.nativeQuery(sql);
         List<String> list = query.getResultList();
+        return list;
+    }
+
+    public List<PetBreed> getAllPetBreedsHasDogilyMapping() {
+        String sql = "SELECT * FROM PetBreed WHERE dogilyCodeMapping IS NOT NULL";
+        Query query = petBreedDAO.nativeQuery(sql, PetBreed.class);
+        List<PetBreed> list = query.getResultList();
         return list;
     }
 

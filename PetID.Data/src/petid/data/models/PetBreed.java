@@ -65,6 +65,8 @@ public class PetBreed implements Serializable {
     @JoinColumn(name = "typeName", referencedColumnName = "name", nullable = false)
     @ManyToOne(optional = false)
     private PetType typeName;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "petBreedCode")
+    private Collection<PetPost> petPostCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "breedCode")
     private Collection<BreedAttr> breedAttrCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "breedCode")
@@ -164,6 +166,15 @@ public class PetBreed implements Serializable {
 
     public void setTypeName(PetType typeName) {
         this.typeName = typeName;
+    }
+
+    @XmlTransient
+    public Collection<PetPost> getPetPostCollection() {
+        return petPostCollection;
+    }
+
+    public void setPetPostCollection(Collection<PetPost> petPostCollection) {
+        this.petPostCollection = petPostCollection;
     }
 
     @XmlTransient

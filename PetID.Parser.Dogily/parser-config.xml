@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<parserConfig xmlns="http://petid.com/xml/parser-config">
+  <baseUrl>https://dogily.vn</baseUrl>
+  <pages>
+    <page>
+      <type>Cat</type>
+      <urlPlaceholder>https://dogily.vn/danh-muc/mua-ban-meo/{code}/</urlPlaceholder>
+    </page>
+    <page>
+      <type>Dog</type>
+      <urlPlaceholder>https://dogily.vn/danh-muc/mua-ban-cho/{code}/</urlPlaceholder>
+    </page>
+  </pages>
+  <postCodeFromUrlRegex><![CDATA[^.*[/]([a-zA-Z0-9\\-]+?)[/]$]]></postCodeFromUrlRegex>
+  <pagingAppendStr>page/{page}</pagingAppendStr>
+</parserConfig>
