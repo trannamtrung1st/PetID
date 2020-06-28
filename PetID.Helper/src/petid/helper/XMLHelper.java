@@ -83,8 +83,8 @@ public class XMLHelper {
         return obj;
     }
 
-    public static String marshall(Object obj, Class objClass) throws Exception {
-        JAXBContext jaxbContext = JAXBContext.newInstance(objClass);
+    public static String marshall(Object obj, Class... objClasses) throws Exception {
+        JAXBContext jaxbContext = JAXBContext.newInstance(objClasses);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, false);
         StringWriter sw = new StringWriter();

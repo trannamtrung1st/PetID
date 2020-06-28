@@ -19,7 +19,7 @@
     </head>
     <body>
         <h1 class="page-title">WELCOME TO PETID</h1>
-        <h1>We have 269 breeds of pet (cat & dog)</h1>
+        <h1>We have ${count} breeds of pet (cat & dog)</h1>
         <form method="POST" enctype="multipart/form-data" action="${pageContext.request.contextPath}">
             <input type="hidden" name="action" value="submit_image"/>
             <div>

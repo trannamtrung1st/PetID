@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -49,6 +50,7 @@ public class PetType implements Serializable {
         this.name = name;
     }
 
+    @XmlElement
     public String getName() {
         return name;
     }
@@ -57,6 +59,7 @@ public class PetType implements Serializable {
         this.name = name;
     }
 
+    @XmlElement
     public String getDescription() {
         return description;
     }
@@ -98,5 +101,5 @@ public class PetType implements Serializable {
     public String toString() {
         return "petid.data.models.PetType[ name=" + name + " ]";
     }
-    
+
 }

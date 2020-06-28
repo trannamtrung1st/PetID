@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +24,7 @@ import petid.business.models.xmlschema.ModelOutput;
 import petid.business.services.PetBreedService;
 import petid.data.EntityContext;
 import petid.data.daos.PetBreedDAO;
+import petid.webapp.Constants;
 
 /**
  *
@@ -86,6 +88,11 @@ public class IndexController extends BaseController {
     }
 
     protected void dispatch(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        ServletContext sContext = getServletContext();
+        Integer count = (Integer) sContext.getAttribute(Constants.BREEDS_COUNT_CACHE_NAME);
+        String listXml = (String) sContext.getAttribute(Constants.BREEDS_XML_CACHE_NAME);
+        request.setAttribute("count", count);
+        request.setAttribute("listXml", listXml);
         response.setContentType("text/html;charset=UTF-8");
         request.getRequestDispatcher(INDEX).forward(request, response);
     }

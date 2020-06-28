@@ -18,6 +18,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -27,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(catalog = "PetID", schema = "dbo")
-@XmlRootElement
+@XmlRootElement(name = "PetBreed")
 @NamedQueries({
     @NamedQuery(name = "PetBreed.findAll", query = "SELECT p FROM PetBreed p")
     , @NamedQuery(name = "PetBreed.findByCode", query = "SELECT p FROM PetBreed p WHERE p.code = :code")
@@ -79,6 +80,7 @@ public class PetBreed implements Serializable {
         this.code = code;
     }
 
+    @XmlElement
     public String getCode() {
         return code;
     }
@@ -87,6 +89,7 @@ public class PetBreed implements Serializable {
         this.code = code;
     }
 
+    @XmlElement
     public String getName() {
         return name;
     }
@@ -95,6 +98,7 @@ public class PetBreed implements Serializable {
         this.name = name;
     }
 
+    @XmlElement
     public String getDescription() {
         return description;
     }
@@ -103,6 +107,7 @@ public class PetBreed implements Serializable {
         this.description = description;
     }
 
+    @XmlElement
     public String getUrl() {
         return url;
     }
@@ -111,6 +116,7 @@ public class PetBreed implements Serializable {
         this.url = url;
     }
 
+    @XmlElement
     public String getImageUrl() {
         return imageUrl;
     }
@@ -119,6 +125,7 @@ public class PetBreed implements Serializable {
         this.imageUrl = imageUrl;
     }
 
+    @XmlElement
     public String getAvailableUrl() {
         return availableUrl;
     }
@@ -127,6 +134,7 @@ public class PetBreed implements Serializable {
         this.availableUrl = availableUrl;
     }
 
+    @XmlTransient
     public Boolean getIsAvailableParsed() {
         return isAvailableParsed;
     }
@@ -135,6 +143,7 @@ public class PetBreed implements Serializable {
         this.isAvailableParsed = isAvailableParsed;
     }
 
+    @XmlTransient
     public Boolean getIsBreedImagesParsed() {
         return isBreedImagesParsed;
     }
@@ -143,6 +152,7 @@ public class PetBreed implements Serializable {
         this.isBreedImagesParsed = isBreedImagesParsed;
     }
 
+    @XmlTransient
     public String getDogilyCodeMapping() {
         return dogilyCodeMapping;
     }
@@ -160,6 +170,7 @@ public class PetBreed implements Serializable {
         this.breedTraitCollection = breedTraitCollection;
     }
 
+    @XmlElement
     public PetType getTypeName() {
         return typeName;
     }
@@ -219,5 +230,5 @@ public class PetBreed implements Serializable {
     public String toString() {
         return "petid.data.models.PetBreed[ code=" + code + " ]";
     }
-    
+
 }
