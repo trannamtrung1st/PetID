@@ -3,26 +3,41 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package petid.business;
+package petid.business.services;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import petid.data.daos.BreedAttrDAO;
-import petid.data.daos.BreedInfoDAO;
-import petid.data.daos.BreedTraitDAO;
+import javax.xml.bind.JAXBException;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.client5.http.fluent.Content;
+import org.apache.hc.client5.http.fluent.Request;
+import org.apache.hc.client5.http.fluent.Response;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpResponse;
+import org.apache.hc.core5.http.HttpStatus;
+import petid.business.Settings;
+import petid.business.models.xmlschema.ModelOutput;
+import petid.business.models.xmlschema.ObjectFactory;
 import petid.data.daos.PetBreedDAO;
 import petid.data.models.BreedAttr;
 import petid.data.models.BreedInfo;
 import petid.data.models.BreedTrait;
 import petid.data.models.PetBreed;
 import petid.data.models.PetType;
+import petid.helper.HttpHelper;
+import petid.helper.StreamHelper;
+import petid.helper.XMLHelper;
 
 /**
  *
@@ -31,20 +46,11 @@ import petid.data.models.PetType;
 public class PetBreedService {
 
     protected PetBreedDAO petBreedDAO;
-    protected BreedTraitDAO breedTraitDAO;
-    protected BreedAttrDAO breedAttrDAO;
-    protected BreedInfoDAO breedInfoDAO;
     protected EntityManager entityManager;
 
-    public PetBreedService(EntityManager entityManager, PetBreedDAO petBreedDAO,
-            BreedTraitDAO breedTraitDAO,
-            BreedInfoDAO breedInfoDAO,
-            BreedAttrDAO breedAttrDAO) {
+    public PetBreedService(EntityManager entityManager, PetBreedDAO petBreedDAO) {
         this.entityManager = entityManager;
         this.petBreedDAO = petBreedDAO;
-        this.breedAttrDAO = breedAttrDAO;
-        this.breedTraitDAO = breedTraitDAO;
-        this.breedInfoDAO = breedInfoDAO;
     }
 
     public PetBreed findPetBreedByCode(String code) {
@@ -136,5 +142,21 @@ public class PetBreedService {
             entity.setBreedAttrCollection(collections);
         }
         collections.add(model);
+    }
+
+    public ModelOutput predictPetIdByImage(InputStream is, String fileName, int topCount) throws IOException, JAXBException {
+        String url = Settings.baseApiUrl + "/api/pet-id?top_count=" + topCount;
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder = HttpHelper.addFileUpload(builder, "file", is, fileName);
+        HttpEntity entity = builder.build();
+        Response resp = Request.post(url).addHeader("Accept", "application/xml").body(entity).execute();
+        CloseableHttpResponse httpResp = (CloseableHttpResponse) resp.returnResponse();
+        String reason = httpResp.getReasonPhrase();
+        String contentStr = StreamHelper.readStringFromStream(httpResp.getEntity().getContent());
+        if (httpResp.getCode() == HttpStatus.SC_OK) {
+            ModelOutput output = XMLHelper.unmarshallDocXml(contentStr, ObjectFactory.class);
+            return output;
+        }
+        return null;
     }
 }

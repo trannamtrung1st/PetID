@@ -16,16 +16,11 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
-import petid.business.PetBreedService;
-import petid.business.PetPostService;
-import petid.business.PetTypeService;
+import petid.business.services.PetBreedService;
+import petid.business.services.PetPostService;
 import petid.data.EntityContext;
-import petid.data.daos.BreedAttrDAO;
-import petid.data.daos.BreedInfoDAO;
-import petid.data.daos.BreedTraitDAO;
 import petid.data.daos.PetBreedDAO;
 import petid.data.daos.PetPostDAO;
-import petid.data.daos.PetTypeDAO;
 import petid.helper.XMLHelper;
 import petid.xmlparser.XmlParserConfig;
 
@@ -45,7 +40,7 @@ public class Entry {
 
         EntityContext context = EntityContext.newInstance();
         EntityManager em = context.getEntityManager();
-        PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em), new BreedTraitDAO(em), new BreedInfoDAO(em), new BreedAttrDAO(em));
+        PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
         PetPostService petPostService = new PetPostService(em, new PetPostDAO(em));
         Parser parser = new Parser(em, petPostService, petBreedService,
                 postValidator, postTemplate, xmlParserConfig, parserConfig);

@@ -16,8 +16,8 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import org.xml.sax.SAXException;
-import petid.business.PetBreedService;
-import petid.business.PetTypeService;
+import petid.business.services.PetBreedService;
+import petid.business.services.PetTypeService;
 import petid.data.EntityContext;
 import petid.data.daos.BreedAttrDAO;
 import petid.data.daos.BreedInfoDAO;
@@ -44,7 +44,7 @@ public class Entry {
         EntityContext context = EntityContext.newInstance();
         EntityManager em = context.getEntityManager();
         PetTypeService petTypeService = new PetTypeService(em, new PetTypeDAO(em));
-        PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em), new BreedTraitDAO(em), new BreedInfoDAO(em), new BreedAttrDAO(em));
+        PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
         Parser parser = new Parser(em, petTypeService, petBreedService,
                 breedValidator, breedTemplate, xmlParserConfig, parserConfig);
         parser.start();

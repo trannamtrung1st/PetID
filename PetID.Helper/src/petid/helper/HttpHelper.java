@@ -14,12 +14,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
+import org.apache.hc.core5.http.ContentType;
 
 /**
  *
  * @author TNT
  */
 public class HttpHelper {
+
+    public static MultipartEntityBuilder addFileUpload(MultipartEntityBuilder builder, String partName, InputStream is, String fileName) {
+        return builder.addBinaryBody(partName, is, ContentType.MULTIPART_FORM_DATA, fileName);
+    }
 
     public static String encodeUrl(String url) throws UnsupportedEncodingException {
         return URLEncoder.encode(url, "UTF-8");
