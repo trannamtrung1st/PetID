@@ -33,6 +33,17 @@
             .type-name {
                 color: red;
             }
+
+            .post-item {
+                vertical-align: top;
+                padding: 10px;
+                display: inline-block;
+                width: 30%;
+            }
+
+            .post-item img {
+                width: 100%;
+            }
         </style>
     </head>
     <body>
@@ -43,30 +54,30 @@
             function getBreedDetail() {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "${pageContext.servletContext.contextPath}/api/breeds/${breedCode}");
-                xhr.send();
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        var status = xhr.status;
-                        if (status === 0 || (status >= 200 && status < 400)) {
-                            // The xhr has been completed successfully
-                            console.log(xhr.responseXML);
-                            processResult(xhr.responseXML);
-                        } else {
-                            alert("Something's wrong");
+                        xhr.send();
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                var status = xhr.status;
+                                if (status === 0 || (status >= 200 && status < 400)) {
+                                    // The xhr has been completed successfully
+                                    console.log(xhr.responseXML);
+                                    processResult(xhr.responseXML);
+                                } else {
+                                    alert("Something's wrong");
+                                }
+                            }
+                        };
+                    }
+
+                    function processResult(xml) {
+                        if (document.implementation && document.implementation.createDocument)
+                        {
+                            let xsltProcessor = new XSLTProcessor();
+                            xsltProcessor.importStylesheet(breedDetailXsl);
+                            let resultDocument = xsltProcessor.transformToFragment(xml, document);
+                            document.getElementsByTagName("body")[0].append(resultDocument);
                         }
                     }
-                };
-            }
-
-            function processResult(xml) {
-                if (document.implementation && document.implementation.createDocument)
-                {
-                    let xsltProcessor = new XSLTProcessor();
-                    xsltProcessor.importStylesheet(breedDetailXsl);
-                    let resultDocument = xsltProcessor.transformToFragment(xml, document);
-                    document.getElementsByTagName("body")[0].append(resultDocument);
-                }
-            }
 
         </script>
     </body>
