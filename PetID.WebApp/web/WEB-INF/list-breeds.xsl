@@ -7,7 +7,7 @@
                                         'ABCDEFGHIJKLOMNOPQRSTUVWXYZ'))])=0">
         <h1>Not found any result</h1>
     </xsl:if>
-    <xsl:for-each select="//PetBreed[contains(translate(name,'abcdefghijklmnopqrstuvwxyz',
+    <xsl:for-each select="//PetBreed[not($query) or contains(translate(name,'abcdefghijklmnopqrstuvwxyz',
                                         'ABCDEFGHIJKLOMNOPQRSTUVWXYZ'),translate($query,'abcdefghijklmnopqrstuvwxyz',
                                         'ABCDEFGHIJKLOMNOPQRSTUVWXYZ'))]">
       <div class="breed-item">

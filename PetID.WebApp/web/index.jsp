@@ -76,14 +76,15 @@
             </div>
         </form>
         <hr/>
-        <c:if test="${not empty param.q}">
-            <x:transform doc="${listXml}" xslt="${xsl}">
-                <x:param name = "query" value="${param.q}"/>
-            </x:transform>
+        <x:transform doc="${listXml}" xslt="${xsl}">
+            <x:param name = "query" value="${param.q}"/>
+        </x:transform>
+        <c:if test="${not empty param.q}"> <!--temp-->
         </c:if>
         <script>
             let guestEnabled = true;
             document.querySelector("#upload-form input[name=file]").onchange = function (e) {
+                document.querySelector("#upload-form button").removeAttribute("disabled");
                 guestEnabled = true;
                 var reader = new FileReader();
                 reader.onload = function (e) {
@@ -103,8 +104,10 @@
 
             function validateSearchPostback() {
                 let value = document.querySelector("#search-form input[name=q]").value;
-                if (value === '${param.q}')
+                if (value === '${param.q}') {
+                    alert("The search value has not been changed");
                     return false;
+                }
                 return true;
             }
 
@@ -127,6 +130,7 @@
             function guestPetByImage() {
                 if (!guestEnabled)
                     return;
+                document.querySelector("#upload-form button").setAttribute("disabled", "true");
                 guestEnabled = false;
                 let topOutputs = document.getElementById("top-outputs");
                 topOutputs.innerHTML = "";
