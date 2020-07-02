@@ -81,6 +81,7 @@
         </x:transform>
         <c:if test="${not empty param.q}"> <!--temp-->
         </c:if>
+        <script src="${pageContext.servletContext.contextPath}/js/main.js"></script>
         <script>
             let guestEnabled = true;
             document.querySelector("#upload-form input[name=file]").onchange = function (e) {
@@ -114,18 +115,6 @@
             let breedsXML = '${listXml}';
             let xmlDoc = getXMLDoc(breedsXML);
             let topXsl = getXMLDoc('${topXsl}');
-            function getXMLDoc(xmlStr) {
-                if (window.DOMParser)
-                {
-                    let parser = new DOMParser();
-                    let xmlDoc = parser.parseFromString(xmlStr, "text/xml");
-                    return xmlDoc;
-                }
-                let xmlDoc = new ActiveXObject("Microsoft.XMLDOM");
-                xmlDoc.async = false;
-                xmlDoc.loadXML(xmlStr);
-                return xmlDoc;
-            }
 
             function guestPetByImage() {
                 if (!guestEnabled)
@@ -188,9 +177,6 @@
                 }
             }
 
-            function xpathEval(expr, xml, type) {
-                return document.evaluate(expr, xml, null, type);
-            }
         </script>
     </body>
 </html>

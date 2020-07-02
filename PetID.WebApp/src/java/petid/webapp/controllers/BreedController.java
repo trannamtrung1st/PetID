@@ -25,7 +25,7 @@ import petid.webapp.Constants;
  *
  * @author TNT
  */
-public class BreedController extends HttpServlet {
+public class BreedController extends BaseController {
 
     protected static final String BREED = "/breed.jsp";
     protected static final String INDEX = "/";
@@ -61,22 +61,24 @@ public class BreedController extends HttpServlet {
     }
 
     protected void dispatch(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        String action = BREED;
-        String redir = INDEX;
         ServletContext sContext = getServletContext();
-        String pathInfo = request.getPathInfo();
-        if (pathInfo == null || pathInfo.isEmpty() || pathInfo.length() == 1) {
-            action = null;
+        String pathInfo = getFinalPathInfo(request);
+        if (pathInfo == null) {
+            response.sendRedirect(sContext.getContextPath() + INDEX);
         } else {
-            String breedCode = pathInfo.substring(1);
-            request.setAttribute(BREED_CODE, breedCode);
+            handleGetBreedDetail(request, response);
         }
-        if (action != null) {
-            response.setContentType("text/html;charset=UTF-8");
-            request.getRequestDispatcher(action).forward(request, response);
-        } else {
-            response.sendRedirect(sContext.getContextPath() + redir);
-        }
+    }
+
+    protected void handleGetBreedDetail(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String breedCode = getFinalPathInfo(request).substring(1);
+        request.setAttribute(BREED_CODE, breedCode);
+        ServletContext sContext = getServletContext();
+        String breedDetailXsl = (String) sContext.getAttribute(Constants.BREED_DETAIL_XSL_CACHE_NAME);
+        request.setAttribute("breedDetailXsl", breedDetailXsl);
+        response.setContentType("text/html;charset=UTF-8");
+        request.getRequestDispatcher(BREED).forward(request, response);
     }
 
     /**

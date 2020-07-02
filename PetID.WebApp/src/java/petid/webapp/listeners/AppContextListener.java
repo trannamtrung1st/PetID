@@ -67,6 +67,11 @@ public class AppContextListener implements ServletContextListener {
             String topoutputXsl = FileHelper.readContent(path).replace("\n", "");
             sContext.setAttribute(Constants.TOP_OUTPUT_XSL_CACHE_NAME, topoutputXsl);
 
+            //cache breed-detail.xsl
+            path = sContext.getRealPath("/WEB-INF/breed-detail.xsl");
+            String breedDetailXsl = FileHelper.readContent(path).replace("\n", "");
+            sContext.setAttribute(Constants.BREED_DETAIL_XSL_CACHE_NAME, breedDetailXsl);
+
         } catch (Exception ex) {
             Logger.getLogger(AppContextListener.class.getName()).log(Level.SEVERE, null, ex);
         }

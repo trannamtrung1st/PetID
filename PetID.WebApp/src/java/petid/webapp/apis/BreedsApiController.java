@@ -35,12 +35,13 @@ import petid.data.models.BreedTrait;
 import petid.data.models.PetBreed;
 import petid.data.models.PetPost;
 import petid.helper.XMLHelper;
+import petid.webapp.controllers.BaseController;
 
 /**
  *
  * @author TNT
  */
-public class BreedsApiController extends HttpServlet {
+public class BreedsApiController extends BaseController {
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -55,8 +56,8 @@ public class BreedsApiController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/xml");
-        String pathInfo = request.getPathInfo();
-        if (pathInfo == null || pathInfo.isEmpty() || pathInfo.length() == 1) {
+        String pathInfo = getFinalPathInfo(request);
+        if (pathInfo == null) {
             response.setStatus(HttpStatus.SC_NOT_FOUND);
         } else {
             try {

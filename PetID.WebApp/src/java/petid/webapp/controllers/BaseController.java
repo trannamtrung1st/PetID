@@ -6,6 +6,7 @@
 package petid.webapp.controllers;
 
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -13,4 +14,11 @@ import javax.servlet.http.HttpServlet;
  */
 public abstract class BaseController extends HttpServlet {
 
+    protected String getFinalPathInfo(HttpServletRequest request) {
+        String pathInfo = request.getPathInfo();
+        if (pathInfo == null || pathInfo.isEmpty() || pathInfo.length() == 1) {
+            return null;
+        }
+        return pathInfo;
+    }
 }
