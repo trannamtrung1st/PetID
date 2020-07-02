@@ -16,6 +16,10 @@
         <servlet-name>BreedController</servlet-name>
         <servlet-class>petid.webapp.controllers.BreedController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BreedsApiController</servlet-name>
+        <servlet-class>petid.webapp.apis.BreedsApiController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>IndexController</servlet-name>
         <url-pattern/>
@@ -27,6 +31,11 @@
     <servlet-mapping>
         <servlet-name>BreedController</servlet-name>
         <url-pattern>/breed/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BreedsApiController</servlet-name>
+        <url-pattern>/api/breeds</url-pattern>
+        <url-pattern>/api/breeds/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

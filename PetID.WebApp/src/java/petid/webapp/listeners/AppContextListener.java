@@ -5,9 +5,7 @@
  */
 package petid.webapp.listeners;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -16,7 +14,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import petid.business.Settings;
-import petid.business.models.ListBreeds;
+import petid.business.dtos.ListBreedsDTO;
+import petid.business.dtos.PetBreedDTO;
+import petid.business.dtos.PetTypeDTO;
 import petid.business.services.PetBreedService;
 import petid.data.EntityContext;
 import petid.data.daos.PetBreedDAO;
@@ -44,9 +44,14 @@ public class AppContextListener implements ServletContextListener {
             //start --- cache PetBreeds
             PetBreedService petBreedService = new PetBreedService(em, new PetBreedDAO(em));
             List<PetBreed> entities = petBreedService.getAllPetBreeds();
-            ListBreeds list = new ListBreeds();
-            list.setList(entities);
-            String xml = XMLHelper.marshall(list, ListBreeds.class, PetBreed.class);
+            ListBreedsDTO list = new ListBreedsDTO();
+            List<PetBreedDTO> dtos = entities.stream().map(o -> {
+                PetBreedDTO dto = new PetBreedDTO(o);
+                dto.setTypeName(new PetTypeDTO(o.getTypeName()));
+                return dto;
+            }).collect(Collectors.toList());
+            list.setList(dtos);
+            String xml = XMLHelper.marshall(list, ListBreedsDTO.class);
 //            FileHelper.writeToFile(xml, "T:\\FPT\\STUDY\\SUMMER2020\\PRX\\Project\\PetID\\PetID.WebApp\\temp.xml");
             sContext.setAttribute(Constants.BREEDS_XML_CACHE_NAME, xml);
             sContext.setAttribute(Constants.BREEDS_COUNT_CACHE_NAME, entities.size());
