@@ -12,6 +12,10 @@
         <servlet-name>ErrorController</servlet-name>
         <servlet-class>petid.webapp.controllers.ErrorController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BreedController</servlet-name>
+        <servlet-class>petid.webapp.controllers.BreedController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>IndexController</servlet-name>
         <url-pattern/>
@@ -19,6 +23,10 @@
     <servlet-mapping>
         <servlet-name>ErrorController</servlet-name>
         <url-pattern>/error</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BreedController</servlet-name>
+        <url-pattern>/breed/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

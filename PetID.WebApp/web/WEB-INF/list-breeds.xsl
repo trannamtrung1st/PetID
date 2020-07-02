@@ -2,14 +2,14 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:template match="/">
     <xsl:param name="query"/>
-    <xsl:if test="count(//PetBreed[contains(translate(name,'abcdefghijklmnopqrstuvwxyz',
-                                        'ABCDEFGHIJKLOMNOPQRSTUVWXYZ'),translate($query,'abcdefghijklmnopqrstuvwxyz',
-                                        'ABCDEFGHIJKLOMNOPQRSTUVWXYZ'))])=0">
+    <xsl:if test="count(//PetBreed[not($query) or contains(translate(name,'abcdefghijklmnopqrstuvwxyz',
+                                        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'),translate($query,'abcdefghijklmnopqrstuvwxyz',
+                                        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'))])=0">
         <h1>Not found any result</h1>
     </xsl:if>
     <xsl:for-each select="//PetBreed[not($query) or contains(translate(name,'abcdefghijklmnopqrstuvwxyz',
-                                        'ABCDEFGHIJKLOMNOPQRSTUVWXYZ'),translate($query,'abcdefghijklmnopqrstuvwxyz',
-                                        'ABCDEFGHIJKLOMNOPQRSTUVWXYZ'))]">
+                                        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'),translate($query,'abcdefghijklmnopqrstuvwxyz',
+                                        'ABCDEFGHIJKLMNOPQRSTUVWXYZ'))]">
       <div class="breed-item">
         <a href="/petid-webapp/breed/{code}">
           <img src="{imageUrl}"/>
